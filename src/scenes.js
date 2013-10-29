@@ -44,43 +44,10 @@ SB.SceneFall = function() {
 
 	// this.add(this.player = new SB.Player(this, 0, 0));
 
-	
-	this.testCircle = {
-		radius: 10,
-		x: SB.canvas.width/2,
-		y: 0,
-		tick: function (delta) {
-			//this.y += delta/2;
-			//console.log(this.x+', '+this.y);
-			return true;
-		},
-		render: function (ctx) {
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
-			ctx.fillStyle = 'red';
-			ctx.fill();
-			return true;
-		},
-		colliderDef: (function () {
-			var circleSd = new b2CircleDef();
-			circleSd.density = 1.0;
-			circleSd.radius = 10;
-			circleSd.restitution = 0.5;
-			circleSd.friction = 0;
-			var circleBd = new b2BodyDef();
-			circleBd.AddShape(circleSd);
-			circleBd.position.Set(SB.canvas.width/2,0);
-			return circleBd;
-		})()
-	}
-
-	this.add(this.testCircle);
-
-
 	this.ground = {
-		radius: 10,
 		x: SB.canvas.width/2,
 		y: 0,
+		//tick: function (delta) { return true; },
 		render: function (ctx) {
 			ctx.fillStyle = 'blue';
 			ctx.fillRect(0, SB.canvas.height/2 - 50, SB.canvas.width, 100);
@@ -95,9 +62,20 @@ SB.SceneFall = function() {
 			groundBd.position.Set(SB.canvas.width/2, SB.canvas.height/2);
 			return groundBd;
 		})()
-	}
+	};
 
 	this.add(this.ground);
+
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);

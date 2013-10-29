@@ -51,3 +51,31 @@ SB.EntityManager.prototype.render = function (ctx) {
 		entity.render(ctx) && this.renderQueue.add(entity);
 	}
 };
+
+
+
+SB.Circle = function (scene, x, y, radius) {
+	this.scene = scene;
+
+	this.x = x || 0;
+	this.y = y || 0;
+	this.radius = radius || 10;
+
+	var circleSd = new b2CircleDef();
+	circleSd.density = 1.0;
+	circleSd.radius = radius;
+	circleSd.restitution = 0.5;
+	circleSd.friction = 0;
+	var circleBd = new b2BodyDef();
+	circleBd.AddShape(circleSd);
+	circleBd.position.Set(x, y);
+	this.colliderDef = circleBd;
+};
+
+SB.Circle.prototype.render = function (ctx) {
+	ctx.beginPath();
+	ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
+	ctx.fillStyle = 'red';
+	ctx.fill();
+	return true;
+};
