@@ -9,11 +9,11 @@
  * Handles user input, updates game state and renderes entities.
  */
 SB.Scene = function() {
-	// this.entityManager = new SB.EntityManager(this);
+	this.entityManager = new SB.EntityManager(this);
 };
 
 SB.Scene.prototype.add = function (entity) {
-	// this.entityManager.add(entity);
+	this.entityManager.add(entity);
 };
 
 SB.Scene.prototype.mouseDown = function (x, y, event) {
@@ -32,11 +32,11 @@ SB.Scene.prototype.keyUp = function (code) {
 };
 
 SB.Scene.prototype.tick = function (delta) {
-	// this.entityManager.tick(delta);
+	this.entityManager.tick(delta);
 };
 
 SB.Scene.prototype.render = function (ctx) {
-	// this.entityManager.render(ctx);
+	this.entityManager.render(ctx);
 };
 
 SB.SceneFall = function() {
@@ -44,22 +44,60 @@ SB.SceneFall = function() {
 
 	// this.add(this.player = new SB.Player(this, 0, 0));
 
-	// Create POC dummy entity
+	
 	this.testCircle = {
 		radius: 10,
 		x: SB.canvas.width/2,
 		y: 0,
 		tick: function (delta) {
-			this.y += delta/2;
-
+			//this.y += delta/2;
+			//console.log(this.x+', '+this.y);
+			return true;
 		},
 		render: function (ctx) {
 			ctx.beginPath();
 			ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
 			ctx.fillStyle = 'red';
 			ctx.fill();
-		}
+			return true;
+		},
+		colliderDef: (function () {
+			var circleSd = new b2CircleDef();
+			circleSd.density = 1.0;
+			circleSd.radius = 10;
+			circleSd.restitution = 0.5;
+			circleSd.friction = 0;
+			var circleBd = new b2BodyDef();
+			circleBd.AddShape(circleSd);
+			circleBd.position.Set(SB.canvas.width/2,0);
+			return circleBd;
+		})()
 	}
+
+	this.add(this.testCircle);
+
+
+	this.ground = {
+		radius: 10,
+		x: SB.canvas.width/2,
+		y: 0,
+		render: function (ctx) {
+			ctx.fillStyle = 'blue';
+			ctx.fillRect(0, SB.canvas.height/2 - 50, SB.canvas.width, 100);
+			return true;
+		},
+		colliderDef: (function () {
+			var groundSd = new b2BoxDef();
+			groundSd.extents.Set(SB.canvas.width/2, 50);
+			groundSd.restitution = 0.2;
+			var groundBd = new b2BodyDef();
+			groundBd.AddShape(groundSd);
+			groundBd.position.Set(SB.canvas.width/2, SB.canvas.height/2);
+			return groundBd;
+		})()
+	}
+
+	this.add(this.ground);
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);
@@ -92,7 +130,7 @@ SB.SceneFall.prototype.tick = function (delta) {
 
 	// this.camera.moveTowards(this.player);
 
-	this.testCircle.tick(delta);
+
 };
 
 SB.SceneFall.prototype.render = function (ctx) {
@@ -102,7 +140,7 @@ SB.SceneFall.prototype.render = function (ctx) {
 
 	this.superClass.render.call(this, ctx);
 
-	this.testCircle.render(ctx);
+
 
 	ctx.restore();
 };
