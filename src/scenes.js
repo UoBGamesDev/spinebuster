@@ -44,23 +44,31 @@ SB.SceneFall = function() {
 
 	/* Temporary hacky code to create the ground */
 	this.add({
-		x: SB.canvas.width/2,
-		y: 0,
+		w: SB.canvas.width,
+		h: 100,
+		get x() { return this.collider.m_position.x; },
+		get y() { return this.collider.m_position.y; },
 		init: (function () {
+			var x = SB.canvas.width/2;
+			var y = SB.canvas.height/2;
+
+			var w = SB.canvas.width;
+			var h = 100;
+
 			var groundSd = new b2BoxDef();
-			groundSd.extents.Set(SB.canvas.width/2, 50);
+			groundSd.extents.Set(w>>1, h>>1);
 			groundSd.restitution = 0.2;
 			var groundBd = new b2BodyDef();
 			groundBd.AddShape(groundSd);
-			groundBd.position.Set(SB.canvas.width/2, SB.canvas.height/2);
+			groundBd.position.Set(x, y);
 			
 			return function (physSim) {
-				physSim.CreateBody(groundBd);
+				this.collider = physSim.CreateBody(groundBd);
 			};
 		})(),
 		render: function (ctx) {
 			ctx.fillStyle = 'blue';
-			ctx.fillRect(0, SB.canvas.height/2 - 50, SB.canvas.width, 100);
+			ctx.fillRect(this.x - (this.w>>1), this.y - (this.h>>1), this.w, this.h);
 			return true;
 		}
 	});

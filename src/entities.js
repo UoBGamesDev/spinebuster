@@ -77,7 +77,6 @@ SB.Circle.prototype.render = function (ctx) {
 
 
 
-
 /**
  * A template of an entity class.
  * Can be made into a base class for entities but would introduce unnecessary complexity. This isn't Java.
