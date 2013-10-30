@@ -66,16 +66,19 @@ SB.SceneFall = function() {
 
 	this.add(this.ground);
 
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
-	this.add(new SB.Circle(this, SB.canvas.width/2 + Math.random(), 0, (Math.random()*20+10)<<0));
+	var c1 = new SB.Circle(this, SB.canvas.width/2, 10, 5);
+	var c2 = new SB.Circle(this, SB.canvas.width/2+1, 0, 5);
+
+	this.add(c1);
+	this.add(c2);
+
+	var jointDef = new b2DistanceJointDef();
+	console.log(jointDef);
+	jointDef.anchorPoint1 = c1.collider.m_position;
+	jointDef.anchorPoint2 = c2.collider.m_position;
+	jointDef.body1 = c1.collider;
+	jointDef.body2 = c2.collider;
+	this.entityManager.physSim.CreateJoint(jointDef);
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);
