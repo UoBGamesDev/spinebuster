@@ -42,43 +42,31 @@ SB.Scene.prototype.render = function (ctx) {
 SB.SceneFall = function() {
 	SB.Scene.call(this);
 
-	// this.add(this.player = new SB.Player(this, 0, 0));
-
-	this.ground = {
+	/* Temporary hacky code to create the ground */
+	this.add({
 		x: SB.canvas.width/2,
 		y: 0,
-		//tick: function (delta) { return true; },
-		render: function (ctx) {
-			ctx.fillStyle = 'blue';
-			ctx.fillRect(0, SB.canvas.height/2 - 50, SB.canvas.width, 100);
-			return true;
-		},
-		colliderDef: (function () {
+		init: (function () {
 			var groundSd = new b2BoxDef();
 			groundSd.extents.Set(SB.canvas.width/2, 50);
 			groundSd.restitution = 0.2;
 			var groundBd = new b2BodyDef();
 			groundBd.AddShape(groundSd);
 			groundBd.position.Set(SB.canvas.width/2, SB.canvas.height/2);
-			return groundBd;
-		})()
-	};
+			
+			return function (physSim) {
+				physSim.CreateBody(groundBd);
+			};
+		})(),
+		render: function (ctx) {
+			ctx.fillStyle = 'blue';
+			ctx.fillRect(0, SB.canvas.height/2 - 50, SB.canvas.width, 100);
+			return true;
+		}
+	});
 
-	this.add(this.ground);
 
-	var c1 = new SB.Circle(this, SB.canvas.width/2, 10, 5);
-	var c2 = new SB.Circle(this, SB.canvas.width/2+1, 0, 5);
-
-	this.add(c1);
-	this.add(c2);
-
-	var jointDef = new b2DistanceJointDef();
-	console.log(jointDef);
-	jointDef.anchorPoint1 = c1.collider.m_position;
-	jointDef.anchorPoint2 = c2.collider.m_position;
-	jointDef.body1 = c1.collider;
-	jointDef.body2 = c2.collider;
-	this.entityManager.physSim.CreateJoint(jointDef);
+	this.add(this.player = new SB.Player(this, SB.canvas.width/2, 0));
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);
@@ -120,7 +108,6 @@ SB.SceneFall.prototype.render = function (ctx) {
 	// this.camera.applyTransform(ctx);
 
 	this.superClass.render.call(this, ctx);
-
 
 
 	ctx.restore();

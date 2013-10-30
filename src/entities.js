@@ -3,7 +3,6 @@ SB.EntityManager = function (scene) {
 
 	this.tickQueue = new List();
 	this.renderQueue = new List();
-	this.physList = new List();
 
 	var worldAABB = new b2AABB();
 	worldAABB.minVertex.Set(0, 0);
@@ -18,10 +17,7 @@ SB.EntityManager.prototype.add = function (entity) {
 	('tick' in entity) && this.tickQueue.add(entity);
 	('render' in entity) && this.renderQueue.add(entity);
 
-	if (!entity.hasOwnProperty('collider') && ('colliderDef' in entity)) {
-		entity.collider = this.physSim.CreateBody(entity.colliderDef);
-		this.physList.add(entity);
-	}
+	('init' in entity) && entity.init(this.physSim);
 };
 
 SB.EntityManager.prototype.tick = function (delta) {
@@ -30,19 +26,10 @@ SB.EntityManager.prototype.tick = function (delta) {
 		entity.tick(delta) && this.tickQueue.add(entity);
 	}
 
-	this.physSim.Step(SB.PHYS_STEP_MS, 1);
+	this.physSim.Step(SB.PHYS_STEP_MS, 1);	
 
-	for (var node = this.physList.head; node; node = node.next) {
-		var entity = node.e;
-		entity.x = entity.collider.m_position.x;
-		entity.y = entity.collider.m_position.y;
-	}
-	
-
-	// for (var body = this.physSim.m_bodyList; body; body = body.m_next) {	
-	// 	for (var shape = body.GetShapeList(); shape != null; shape = shape.GetNext()) {
-	// 	}
-	// }
+	// NOTE: An entity can have a collider (body) and a collider can have a bunch of shapes.
+	//		 Every physical entity is responsible for handling its own collider.
 };
 
 SB.EntityManager.prototype.render = function (ctx) {
@@ -50,9 +37,15 @@ SB.EntityManager.prototype.render = function (ctx) {
 		var entity = this.renderQueue.poll();
 		entity.render(ctx) && this.renderQueue.add(entity);
 	}
+
+	// if (SB.DEBUG) {
+	// 	for (var body = this.physSim.m_bodyList; body; body = body.m_next) {	
+	// 		for (var shape = body.GetShapeList(); shape != null; shape = shape.GetNext()) {
+	// 			// TODO: Draw simple shapes in the physics world when in debug mode.
+	// 		}
+	// 	}
+	// }
 };
-
-
 
 SB.Circle = function (scene, x, y, radius) {
 	this.scene = scene;
@@ -70,12 +63,66 @@ SB.Circle = function (scene, x, y, radius) {
 	circleBd.AddShape(circleSd);
 	circleBd.position.Set(x, y);
 	this.colliderDef = circleBd;
+
+	this.collider = scene.entityManager.physSim.CreateBody(circleBd);
 };
 
 SB.Circle.prototype.render = function (ctx) {
 	ctx.beginPath();
-	ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
+	ctx.arc(this.collider.m_position.x, this.collider.m_position.y, this.radius, 0, 2*Math.PI);
 	ctx.fillStyle = 'red';
 	ctx.fill();
+	return true;
+};
+
+
+
+
+/**
+ * A template of an entity class.
+ * Can be made into a base class for entities but would introduce unnecessary complexity. This isn't Java.
+ */
+SB.Template = function (scene, x, y, arg) {
+	this.scene = scene;
+
+	this.pos = {
+		x: x || 0,
+		y: y || 0
+	}
+	this.arg = arg;
+};
+
+/**
+ * Runs once an entity is added to a scene.
+ * This method is where all physics bodies should be instatiated, and not in the constructor.
+ * This ensures that an object will only start physic interaction on entering a scene and not on creation.
+ *
+ * @param physSim The scene's physics world.
+ *
+ */
+SB.Template.prototype.init = function (physSim) {
+};
+
+/**
+ * Updates an entity.
+ *
+ * @param delta Time in milliseconds since last tick.
+ *
+ * @return Returns true to reneter the tick queue, false to remain out (e.g. on death).
+ *
+ */
+SB.Template.prototype.tick = function (delta) {
+	return true;
+};
+
+/**
+ * Renders an entity.
+ *
+ * @param delta Time in milliseconds since last tick.
+ *
+ * @return Returns true to reneter the tick queue, false to remain out (e.g. on death).
+ *
+ */
+SB.Template.prototype.render = function (ctx) {
 	return true;
 };
