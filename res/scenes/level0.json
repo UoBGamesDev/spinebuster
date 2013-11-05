@@ -1,0 +1,17 @@
+{
+	"name": "Level 0",
+	"desc": "Just a demo level",
+
+	"w": 400,
+	"h": 500,
+
+	"objects": [
+		{
+			"type": "SB.Rectangle",
+			"x": 10,
+			"y": 10,
+			"w": 10,
+			"h": 10
+		}
+	]
+}

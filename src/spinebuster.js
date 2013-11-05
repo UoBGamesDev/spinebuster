@@ -49,7 +49,7 @@ var SB = {
 		console.log('Starting game.');
 
 		// Instantiate current scene (can be triggered from main menu later)
-		game.currentScene =  new SB.SceneFall();
+		game.currentScene =  new SB.SceneFall('level0');
 
 		// Start update and render loop
 

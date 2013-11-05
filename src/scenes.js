@@ -39,42 +39,31 @@ SB.Scene.prototype.render = function (ctx) {
 	this.entityManager.render(ctx);
 };
 
-SB.SceneFall = function() {
+SB.SceneFall = function(levelName) {
 	SB.Scene.call(this);
 
-	/* Temporary hacky code to create the ground */
-	this.add({
-		w: SB.canvas.width,
-		h: 100,
-		get x() { return this.collider.m_position.x; },
-		get y() { return this.collider.m_position.y; },
-		init: (function () {
-			var x = SB.canvas.width/2;
-			var y = SB.canvas.height/2;
-
-			var w = SB.canvas.width;
-			var h = 100;
-
-			var groundSd = new b2BoxDef();
-			groundSd.extents.Set(w>>1, h>>1);
-			groundSd.restitution = 0.2;
-			var groundBd = new b2BodyDef();
-			groundBd.AddShape(groundSd);
-			groundBd.position.Set(x, y);
-			
-			return function (physSim) {
-				this.collider = physSim.CreateBody(groundBd);
-			};
-		})(),
-		render: function (ctx) {
-			ctx.fillStyle = 'blue';
-			ctx.fillRect(this.x - (this.w>>1), this.y - (this.h>>1), this.w, this.h);
-			return true;
-		}
-	});
-
-
 	this.add(this.player = new SB.Player(this, SB.canvas.width/2, 0));
+
+	var scene = this;
+
+	function initScene (data) {
+		data = JSON.parse(data);
+
+		scene.name = data.name;
+		scene.desc = data.desc;
+
+		scene.w = data.w;
+		scene.h = data.h;
+
+		var cenX = SB.canvas.width/2;
+
+		scene.add(new SB.Rectangle(scene, cenX-50-(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
+		scene.add(new SB.Rectangle(scene, cenX+50+(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
+		scene.add(new SB.Rectangle(scene, cenX, scene.h+150, scene.w+200, 100));
+	}
+
+	// TODO: Handle potential errors.
+	loadAsync('res/scenes/'+levelName+'.json', initScene);
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);
