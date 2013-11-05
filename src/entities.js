@@ -5,8 +5,8 @@ SB.EntityManager = function (scene) {
 	this.renderQueue = new List();
 
 	var worldAABB = new b2AABB();
-	worldAABB.minVertex.Set(0, 0);
-	worldAABB.maxVertex.Set(SB.canvas.width, SB.canvas.height);
+	worldAABB.minVertex.Set(Number.MIN_VALUE, Number.MIN_VALUE);
+	worldAABB.maxVertex.Set(Number.MAX_VALUE, Number.MAX_VALUE);
 	var gravity = new b2Vec2(0, 300);
 	var doSleep = true;
 
@@ -72,6 +72,36 @@ SB.Circle.prototype.render = function (ctx) {
 	ctx.arc(this.collider.m_position.x, this.collider.m_position.y, this.radius, 0, 2*Math.PI);
 	ctx.fillStyle = 'red';
 	ctx.fill();
+	return true;
+};
+
+
+SB.Rectangle = function (scene, x, y, w, h, color) {
+	this.scene = scene;
+
+	// TODO: Update entity position with collider position.
+	this.x = x || 0;
+	this.y = y || 0;
+	this.w = w || 1;
+	this.h = h || 1;
+	this.color = color || 'red';
+};
+
+SB.Rectangle.prototype.init = function (physSim) {
+	var boxSd = new b2BoxDef();
+	boxSd.extents.Set(this.w>>1, this.h>>1);
+	boxSd.restitution = 0.2;
+	boxSd.friction = 0.01;
+	var boxBd = new b2BodyDef();
+	boxBd.AddShape(boxSd);
+	boxBd.position.Set(this.x, this.y);
+
+	this.collider = physSim.CreateBody(boxBd);
+};
+
+SB.Rectangle.prototype.render = function (ctx) {
+	ctx.fillStyle = this.color;
+	ctx.fillRect(this.collider.m_position.x - (this.w>>1), this.collider.m_position.y - (this.h>>1), this.w, this.h);
 	return true;
 };
 

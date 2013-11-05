@@ -38,6 +38,8 @@ var SB = {
 		function render () {
 			requestAnimFrame(render);
 
+			// Clear transform
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			// Clear canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -49,7 +51,7 @@ var SB = {
 		console.log('Starting game.');
 
 		// Instantiate current scene (can be triggered from main menu later)
-		game.currentScene =  new SB.SceneFall();
+		game.currentScene =  new SB.SceneFall('level0');
 
 		// Start update and render loop
 
