@@ -76,6 +76,36 @@ SB.Circle.prototype.render = function (ctx) {
 };
 
 
+SB.Rectangle = function (scene, x, y, w, h) {
+	this.scene = scene;
+
+	// TODO: Update entity position with collider position.
+	this.x = x || 0;
+	this.y = y || 0;
+	this.w = w || 1;
+	this.h = h || 1;
+};
+
+SB.Rectangle.prototype.init = function (physSim) {
+	var boxSd = new b2BoxDef();
+	boxSd.extents.Set(this.w>>1, this.h>>1);
+	boxSd.density = 1.0;
+	boxSd.restitution = 0.5;
+	boxSd.friction = 0;
+	var boxBd = new b2BodyDef();
+	boxBd.AddShape(boxSd);
+	boxBd.position.Set(this.x, this.y);
+
+	this.collider = physSim.CreateBody(boxBd);
+};
+
+SB.Rectangle.prototype.render = function (ctx) {
+	ctx.fillStyle = 'red';
+	ctx.fillRect(this.x - (this.w>>1), this.y - (this.h>>1), this.w, this.h);
+	return true;
+};
+
+
 
 /**
  * A template of an entity class.
