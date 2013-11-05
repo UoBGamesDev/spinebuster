@@ -202,27 +202,36 @@ SB.Player.prototype.render = function (ctx) {
 
 	var texs = SB.Player.textures;
 
-	ctx.setTransform(this.r.col1.x, this.r.col1.y, this.r.col2.x, this.r.col2.y, this.x, this.y);
+	ctx.save();
+	ctx.transform(this.r.col1.x, this.r.col1.y, this.r.col2.x, this.r.col2.y, this.x, this.y);
 	ctx.drawImage(texs.body, -texs.body.width>>1, -texs.body.height>>1, texs.body.width, texs.body.height-20);
-
 	ctx.translate(0, 15, 0);
 	ctx.drawImage(texs.hips, -texs.hips.width>>1, -texs.hips.height>>1, texs.hips.width, texs.hips.height);
+	ctx.restore();
 
-	ctx.setTransform(this.head.m_R.col1.x, this.head.m_R.col1.y, this.head.m_R.col2.x, this.head.m_R.col2.y, this.head.m_position.x, this.head.m_position.y);
+	ctx.save();
+	ctx.transform(this.head.m_R.col1.x, this.head.m_R.col1.y, this.head.m_R.col2.x, this.head.m_R.col2.y, this.head.m_position.x, this.head.m_position.y);
 	ctx.drawImage(texs.head, -texs.head.width>>1, -texs.head.height>>1, texs.head.width, texs.head.height);
+	ctx.restore();
 	
-	ctx.setTransform(this.armR.m_R.col1.x, this.armR.m_R.col1.y, this.armR.m_R.col2.x, this.armR.m_R.col2.y, this.armR.m_position.x, this.armR.m_position.y);
+	ctx.save();
+	ctx.transform(this.armR.m_R.col1.x, this.armR.m_R.col1.y, this.armR.m_R.col2.x, this.armR.m_R.col2.y, this.armR.m_position.x, this.armR.m_position.y);
 	ctx.drawImage(texs.armR, -texs.armR.width>>1, -texs.armR.height>>1, texs.armR.width, texs.armR.height);
+	ctx.restore();
 	
-	ctx.setTransform(this.armL.m_R.col1.x, this.armL.m_R.col1.y, this.armL.m_R.col2.x, this.armL.m_R.col2.y, this.armL.m_position.x, this.armL.m_position.y);
+	ctx.save();
+	ctx.transform(this.armL.m_R.col1.x, this.armL.m_R.col1.y, this.armL.m_R.col2.x, this.armL.m_R.col2.y, this.armL.m_position.x, this.armL.m_position.y);
 	ctx.drawImage(texs.armL, -texs.armL.width>>1, -texs.armL.height>>1, texs.armL.width, texs.armL.height);
+	ctx.restore();
 
-	ctx.setTransform(this.legR.m_R.col1.x, this.legR.m_R.col1.y, this.legR.m_R.col2.x, this.legR.m_R.col2.y, this.legR.m_position.x, this.legR.m_position.y);
+	ctx.save();
+	ctx.transform(this.legR.m_R.col1.x, this.legR.m_R.col1.y, this.legR.m_R.col2.x, this.legR.m_R.col2.y, this.legR.m_position.x, this.legR.m_position.y);
 	ctx.drawImage(texs.legR, -texs.legR.width>>1, -texs.legR.height>>1, texs.legR.width, texs.legR.height);
+	ctx.restore();
 
-	ctx.setTransform(this.legL.m_R.col1.x, this.legL.m_R.col1.y, this.legL.m_R.col2.x, this.legL.m_R.col2.y, this.legL.m_position.x, this.legL.m_position.y);
+	ctx.save();
+	ctx.transform(this.legL.m_R.col1.x, this.legL.m_R.col1.y, this.legL.m_R.col2.x, this.legL.m_R.col2.y, this.legL.m_position.x, this.legL.m_position.y);
 	ctx.drawImage(texs.legL, -texs.legL.width>>1, -texs.legL.height>>1, texs.legL.width, texs.legL.height);
-
 	ctx.restore();
 
 	return true;

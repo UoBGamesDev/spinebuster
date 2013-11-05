@@ -38,6 +38,8 @@ var SB = {
 		function render () {
 			requestAnimFrame(render);
 
+			// Clear transform
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			// Clear canvas
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 

@@ -42,9 +42,22 @@ SB.Scene.prototype.render = function (ctx) {
 SB.SceneFall = function(levelName) {
 	SB.Scene.call(this);
 
-	this.add(this.player = new SB.Player(this, SB.canvas.width/2, 0));
-
 	var scene = this;
+	var cenX = SB.canvas.width>>1;
+	var cenY = SB.canvas.height>>1;
+
+	this.camera = {
+		x: 0,
+		y: 0,
+		moveTowards: function (entity, speed) {
+			speed = speed || 0.05;
+			this.x += speed * (entity.x-cenX-this.x);
+			this.y += speed * (entity.y-cenY-this.y);
+		},
+		applyTransform: function (ctx) {
+			ctx.translate(-this.x, -this.y);
+		}
+	};
 
 	function initScene (data) {
 		data = JSON.parse(data);
@@ -55,11 +68,11 @@ SB.SceneFall = function(levelName) {
 		scene.w = data.w;
 		scene.h = data.h;
 
-		var cenX = SB.canvas.width/2;
-
 		scene.add(new SB.Rectangle(scene, cenX-50-(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
 		scene.add(new SB.Rectangle(scene, cenX+50+(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
 		scene.add(new SB.Rectangle(scene, cenX, scene.h+150, scene.w+200, 100));
+
+		scene.add(scene.player = new SB.Player(this, cenX, 0));
 	}
 
 	// TODO: Handle potential errors.
@@ -94,15 +107,13 @@ SB.SceneFall.prototype.keyUp = function (code) {
 SB.SceneFall.prototype.tick = function (delta) {
 	this.superClass.tick.call(this, delta);
 
-	// this.camera.moveTowards(this.player);
-
-
+	this.camera.moveTowards(this.player);
 };
 
 SB.SceneFall.prototype.render = function (ctx) {
 	ctx.save();
 
-	// this.camera.applyTransform(ctx);
+	this.camera.applyTransform(ctx);
 
 	this.superClass.render.call(this, ctx);
 
