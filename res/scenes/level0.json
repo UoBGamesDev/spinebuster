@@ -3,15 +3,28 @@
 	"desc": "Just a demo level",
 
 	"w": 400,
-	"h": 4000,
+	"h": 10000,
 
 	"objects": [
 		{
-			"type": "SB.Rectangle",
-			"x": 10,
-			"y": 10,
-			"w": 10,
-			"h": 10
+			"type": "Rectangle",
+			"args": [50, 500, 100, 100, "blue"]
+		},
+		{
+			"type": "Rectangle",
+			"args": [250, 700, 100, 10, "green"]
+		},
+		{
+			"type": "Rectangle",
+			"args": [150, 1500, 10, 200, "pink"]
+		},
+		{
+			"type": "Rectangle",
+			"args": [100, 2000, 200, 100, "cyan"]
+		},
+		{
+			"type": "Rectangle",
+			"args": [300, 3000, 150, 50, "magenta"]
 		}
 	]
 }

@@ -88,7 +88,7 @@ SB.Player.prototype.init = function (physSim) {
 	boxSd.extents.Set(15, 25);
 	boxSd.density = 1.0;
 	boxSd.restitution = 0.5;
-	boxSd.friction = 0;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.startX, this.startY);
@@ -99,7 +99,7 @@ SB.Player.prototype.init = function (physSim) {
 	circleSd.density = 1.0;
 	circleSd.radius = 15;
 	circleSd.restitution = 0.5;
-	circleSd.friction = 0;
+	circleSd.friction = 0.01;
 	var circleBd = new b2BodyDef();
 	circleBd.AddShape(circleSd);
 	circleBd.position.Set(this.startX, this.startY-40);
@@ -121,7 +121,7 @@ SB.Player.prototype.init = function (physSim) {
 	boxSd.extents.Set(5, 15);
 	boxSd.density = 1.0;
 	boxSd.restitution = 0.5;
-	boxSd.friction = 0;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.startX-15, this.startY-10);
@@ -139,7 +139,7 @@ SB.Player.prototype.init = function (physSim) {
 	boxSd.extents.Set(5, 15);
 	boxSd.density = 1.0;
 	boxSd.restitution = 0.5;
-	boxSd.friction = 0;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.startX+15, this.startY-10);
@@ -157,7 +157,7 @@ SB.Player.prototype.init = function (physSim) {
 	boxSd.extents.Set(5, 15);
 	boxSd.density = 1.0;
 	boxSd.restitution = 0.5;
-	boxSd.friction = 0;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.startX-10, this.startY+40);
@@ -178,7 +178,7 @@ SB.Player.prototype.init = function (physSim) {
 	boxSd.extents.Set(5, 15);
 	boxSd.density = 1.0;
 	boxSd.restitution = 0.5;
-	boxSd.friction = 0;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.startX+10, this.startY+40);

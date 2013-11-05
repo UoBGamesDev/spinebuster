@@ -50,7 +50,7 @@ SB.SceneFall = function(levelName) {
 		x: 0,
 		y: 0,
 		moveTowards: function (entity, speed) {
-			speed = speed || 0.05;
+			speed = speed || 0.1;
 			this.x += speed * (entity.x-cenX-this.x);
 			this.y += speed * (entity.y-cenY-this.y);
 		},
@@ -71,6 +71,26 @@ SB.SceneFall = function(levelName) {
 		scene.add(new SB.Rectangle(scene, cenX-50-(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
 		scene.add(new SB.Rectangle(scene, cenX+50+(scene.w>>1), (scene.h>>1)+100, 100, scene.h));
 		scene.add(new SB.Rectangle(scene, cenX, scene.h+150, scene.w+200, 100));
+
+		function createObj(type, args) {
+			function C() {
+				return type.apply(this, args);
+			}
+			C.prototype = type.prototype;
+			return new C();
+		}
+
+		for (var i = 0, len = data.objects.length; i < len; i++) {
+			var object = data.objects[i];
+			if (!(object.type in SB))
+				continue;
+
+			object.args.unshift(scene);
+			object = createObj(SB[object.type], object.args);
+			object.x += cenX-(scene.w>>1);
+			object.y += 100;
+			scene.add(object);
+		}
 
 		scene.add(scene.player = new SB.Player(this, cenX, 0));
 	}

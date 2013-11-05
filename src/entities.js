@@ -76,7 +76,7 @@ SB.Circle.prototype.render = function (ctx) {
 };
 
 
-SB.Rectangle = function (scene, x, y, w, h) {
+SB.Rectangle = function (scene, x, y, w, h, color) {
 	this.scene = scene;
 
 	// TODO: Update entity position with collider position.
@@ -84,12 +84,14 @@ SB.Rectangle = function (scene, x, y, w, h) {
 	this.y = y || 0;
 	this.w = w || 1;
 	this.h = h || 1;
+	this.color = color || 'red';
 };
 
 SB.Rectangle.prototype.init = function (physSim) {
 	var boxSd = new b2BoxDef();
 	boxSd.extents.Set(this.w>>1, this.h>>1);
 	boxSd.restitution = 0.2;
+	boxSd.friction = 0.01;
 	var boxBd = new b2BodyDef();
 	boxBd.AddShape(boxSd);
 	boxBd.position.Set(this.x, this.y);
@@ -98,7 +100,7 @@ SB.Rectangle.prototype.init = function (physSim) {
 };
 
 SB.Rectangle.prototype.render = function (ctx) {
-	ctx.fillStyle = 'red';
+	ctx.fillStyle = this.color;
 	ctx.fillRect(this.collider.m_position.x - (this.w>>1), this.collider.m_position.y - (this.h>>1), this.w, this.h);
 	return true;
 };
