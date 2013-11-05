@@ -41,6 +41,8 @@ SB.Player.textures = {
 	hips: (function () {
 		var img = new Image();
 		img.src = 'res/textures/player/hips.png';
+		img.width = 30;
+		img.height = 20;
 		return img;
 	})(),
 	legL: (function () {
@@ -201,7 +203,10 @@ SB.Player.prototype.render = function (ctx) {
 	var texs = SB.Player.textures;
 
 	ctx.setTransform(this.r.col1.x, this.r.col1.y, this.r.col2.x, this.r.col2.y, this.x, this.y);
-	ctx.drawImage(texs.body, -texs.body.width/2, -texs.body.height/2, texs.body.width, texs.body.height);
+	ctx.drawImage(texs.body, -texs.body.width/2, -texs.body.height/2, texs.body.width, texs.body.height-20);
+
+	ctx.translate(0, 15, 0);
+	ctx.drawImage(texs.hips, -texs.hips.width/2, -texs.hips.height/2, texs.hips.width, texs.hips.height);
 
 	ctx.setTransform(this.head.m_R.col1.x, this.head.m_R.col1.y, this.head.m_R.col2.x, this.head.m_R.col2.y, this.head.m_position.x, this.head.m_position.y);
 	ctx.drawImage(texs.head, -texs.head.width/2, -texs.head.height/2, texs.head.width, texs.head.height);
