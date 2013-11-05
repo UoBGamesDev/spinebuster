@@ -5,8 +5,8 @@ SB.EntityManager = function (scene) {
 	this.renderQueue = new List();
 
 	var worldAABB = new b2AABB();
-	worldAABB.minVertex.Set(0, 0);
-	worldAABB.maxVertex.Set(SB.canvas.width, SB.canvas.height);
+	worldAABB.minVertex.Set(Number.MIN_VALUE, Number.MIN_VALUE);
+	worldAABB.maxVertex.Set(Number.MAX_VALUE, Number.MAX_VALUE);
 	var gravity = new b2Vec2(0, 300);
 	var doSleep = true;
 
