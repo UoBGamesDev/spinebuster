@@ -9,11 +9,11 @@
  * Handles user input, updates game state and renderes entities.
  */
 SB.Scene = function() {
-	// this.entityManager = new SB.EntityManager(this);
+	this.entityManager = new SB.EntityManager(this);
 };
 
 SB.Scene.prototype.add = function (entity) {
-	// this.entityManager.add(entity);
+	this.entityManager.add(entity);
 };
 
 SB.Scene.prototype.mouseDown = function (x, y, event) {
@@ -32,34 +32,49 @@ SB.Scene.prototype.keyUp = function (code) {
 };
 
 SB.Scene.prototype.tick = function (delta) {
-	// this.entityManager.tick(delta);
+	this.entityManager.tick(delta);
 };
 
 SB.Scene.prototype.render = function (ctx) {
-	// this.entityManager.render(ctx);
+	this.entityManager.render(ctx);
 };
 
 SB.SceneFall = function() {
 	SB.Scene.call(this);
 
-	// this.add(this.player = new SB.Player(this, 0, 0));
+	/* Temporary hacky code to create the ground */
+	this.add({
+		w: SB.canvas.width,
+		h: 100,
+		get x() { return this.collider.m_position.x; },
+		get y() { return this.collider.m_position.y; },
+		init: (function () {
+			var x = SB.canvas.width/2;
+			var y = SB.canvas.height/2;
 
-	// Create POC dummy entity
-	this.testCircle = {
-		radius: 10,
-		x: SB.canvas.width/2,
-		y: 0,
-		tick: function (delta) {
-			this.y += delta/2;
+			var w = SB.canvas.width;
+			var h = 100;
 
-		},
+			var groundSd = new b2BoxDef();
+			groundSd.extents.Set(w>>1, h>>1);
+			groundSd.restitution = 0.2;
+			var groundBd = new b2BodyDef();
+			groundBd.AddShape(groundSd);
+			groundBd.position.Set(x, y);
+			
+			return function (physSim) {
+				this.collider = physSim.CreateBody(groundBd);
+			};
+		})(),
 		render: function (ctx) {
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
-			ctx.fillStyle = 'red';
-			ctx.fill();
+			ctx.fillStyle = 'blue';
+			ctx.fillRect(this.x - (this.w>>1), this.y - (this.h>>1), this.w, this.h);
+			return true;
 		}
-	}
+	});
+
+
+	this.add(this.player = new SB.Player(this, SB.canvas.width/2, 0));
 };
 
 SB.SceneFall.prototype = Object.create(SB.Scene.prototype);
@@ -92,7 +107,7 @@ SB.SceneFall.prototype.tick = function (delta) {
 
 	// this.camera.moveTowards(this.player);
 
-	this.testCircle.tick(delta);
+
 };
 
 SB.SceneFall.prototype.render = function (ctx) {
@@ -102,7 +117,6 @@ SB.SceneFall.prototype.render = function (ctx) {
 
 	this.superClass.render.call(this, ctx);
 
-	this.testCircle.render(ctx);
 
 	ctx.restore();
 };

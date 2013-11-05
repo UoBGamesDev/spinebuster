@@ -2,7 +2,8 @@
 
 var SB = {
 	DEBUG: true,
-	TICK_INTERVAL_MS: 1000.0/60.0
+	TICK_STEP_MS: 1000.0/60.0,
+	PHYS_STEP_MS: 1.0/60.0
 };
 
 (function () {
@@ -27,7 +28,7 @@ var SB = {
 		var lastTick = Date.now();
 		function tick () {
 			// FIXME: Chrome throttles the interval down to 1s on inactive tabs.
-			setTimeout(tick, this.TICK_INTERVAL_MS);
+			setTimeout(tick, this.TICK_STEP_MS);
 			
 			var now = Date.now();
 			game.currentScene.tick(now - lastTick);
@@ -52,7 +53,7 @@ var SB = {
 
 		// Start update and render loop
 
-		setTimeout(tick, this.TICK_INTERVAL_MS);
+		setTimeout(tick, this.TICK_STEP_MS);
 
 		window.requestAnimFrame = window.requestAnimationFrame ||
 				window.webkitRequestAnimationFrame ||
